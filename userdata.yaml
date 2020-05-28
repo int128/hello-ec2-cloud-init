@@ -1,0 +1,26 @@
+#cloud-config
+write_files:
+  - path: /etc/systemd/system/helloworld.service
+    content: |
+      [Unit]
+      Description = Hello World
+
+      [Service]
+      ExecStart = /usr/local/bin/helloworld
+      Restart = always
+      Type = simple
+
+      [Install]
+      WantedBy = multi-user.target
+
+  - path: /usr/local/bin/helloworld
+    permissions: 0755
+    content: |
+      #!/bin/sh
+      while true; do
+        date >> /tmp/helloworld.log
+        sleep 1
+      done
+
+runcmd:
+  - [ systemctl, start, helloworld ]
