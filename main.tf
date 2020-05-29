@@ -34,7 +34,25 @@ resource "aws_instance" "this" {
   iam_instance_profile = aws_iam_instance_profile.this.name
 
   # https://cloudinit.readthedocs.io/en/latest/topics/modules.html
-  user_data_base64 = filebase64("./userdata.yaml")
+  user_data_base64 = base64encode(join("\n", [
+    "#cloud-config",
+    yamlencode({
+      write_files : [
+        {
+          path : "/etc/systemd/system/helloworld.service",
+          content : file("./helloworld.service"),
+        },
+        {
+          path : "/usr/local/bin/helloworld",
+          content : file("./helloworld.sh"),
+          permissions : "0755",
+        },
+      ],
+      runcmd : [
+        ["systemctl", "start", "helloworld"],
+      ],
+    })
+  ]))
 }
 
 resource "aws_iam_instance_profile" "this" {
