@@ -23,6 +23,7 @@ resource "aws_instance" "this" {
         },
       ],
       runcmd : [
+        ["systemctl", "enable", "helloworld"],
         ["systemctl", "start", "helloworld"],
       ],
     })
