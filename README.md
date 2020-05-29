@@ -17,7 +17,6 @@ terraform apply
 ```
 
 This example will launch an instance running a background service.
-See [userdata.yaml](userdata.yaml) for more.
 
 ```console
 % aws ssm start-session --target i-0935e9832a6391309 --region us-west-2
